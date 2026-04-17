@@ -37,7 +37,7 @@ button,input,textarea,select{font-family:inherit}
 
 .hdr{background:var(--hbg);border-bottom:1px solid var(--brd2);padding:max(12px,env(safe-area-inset-top)) 12px 8px;position:sticky;top:0;z-index:100}
 .hdr-top{display:flex;align-items:baseline;gap:6px}
-.hdr h1{font-size:18px;font-weight:800;color:var(--ac2);letter-spacing:.03em}
+.hdr h1{font-size:15px;font-weight:800;color:var(--ac2);letter-spacing:.03em}
 .hdr .sub{font-size:9px;color:var(--tx3)}
 .hdr-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px;gap:4px;flex-wrap:wrap}
 .stat{font-size:10px;color:var(--tx2)}.stat b{color:var(--tx)}
@@ -274,12 +274,15 @@ button,input,textarea,select{font-family:inherit}
 <!-- Header -->
 <div class="hdr" id="hdr">
 <div class="hdr-top">
-<h1>🍶 利き歩きナビ</h1><span class="sub">v4｜全52店</span>
+<h1>🍶 日本酒利き歩きナビ2026</h1><span class="sub">v4.04</span>
 <button class="cbtn thm" id="themeBtn" onclick="toggleTheme()" style="margin-left:auto">🌙</button>
+</div>
+<div style="text-align:center;padding:4px 0">
+<span style="font-size:22px;font-weight:800;color:var(--gld)">🍶 <span id="cupStat">0</span>杯</span>
+<span class="bac-ind" id="bacInd" style="font-size:13px"></span>
 </div>
 <div class="hdr-row">
 <span class="stat" id="stat"></span>
-<span class="stat">🍶 <b id="cupStat">0</b>杯<span class="bac-ind" id="bacInd"></span></span>
 </div>
 <div class="pbar"><div class="pbar-fill" id="pbar"></div></div>
 <div class="ctrls">
