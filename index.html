@@ -3,107 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
-<title>利き歩きナビ 2026</title>
+<title>利き歩きナビ 2026 v2</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#0f0f0f;color:#e8e4de;min-height:100dvh;padding-bottom:90px;overflow-x:hidden}
-button{font-family:inherit}
+button,input,textarea{font-family:inherit}
 
-.hdr{background:linear-gradient(135deg,#1a0a0a,#2a1215,#1a0a0a);border-bottom:1px solid #3a2020;padding:16px 14px 12px;position:sticky;top:0;z-index:100}
+/* Header */
+.hdr{background:linear-gradient(135deg,#1a0a0a,#2a1215,#1a0a0a);border-bottom:1px solid #3a2020;padding:14px 14px 10px;position:sticky;top:0;z-index:100}
 .hdr-top{display:flex;align-items:baseline;gap:8px}
-.hdr h1{font-size:20px;font-weight:800;color:#e8c4c4;letter-spacing:.04em}
-.hdr .sub{font-size:11px;color:#8a7070}
-.hdr-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:6px;flex-wrap:wrap}
-.stat{font-size:12px;color:#a89090}
-.stat b{color:#e8c4c4}
-.pbar{margin-top:8px;height:3px;background:#2a1a1a;border-radius:2px;overflow:hidden}
+.hdr h1{font-size:19px;font-weight:800;color:#e8c4c4;letter-spacing:.04em}
+.hdr .sub{font-size:10px;color:#8a7070}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px;gap:6px;flex-wrap:wrap}
+.stat{font-size:11px;color:#a89090}.stat b{color:#e8c4c4}
+.pbar{margin-top:6px;height:3px;background:#2a1a1a;border-radius:2px;overflow:hidden}
 .pbar-fill{height:100%;background:linear-gradient(90deg,#c0392b,#e74c3c);border-radius:2px;transition:width .4s}
-
-.ctrls{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
-.cbtn{background:#222;color:#bbb;border:1px solid #333;border-radius:14px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.ctrls{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.cbtn{background:#222;color:#bbb;border:1px solid #333;border-radius:14px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap}
 .cbtn.on{background:#c0392b;color:#fff;border-color:#c0392b}
-.cbtn.map-btn{background:#1a3a1a;border-color:#2a5a2a;color:#7c7}
-.cbtn.map-btn.apple{background:#1a1a3a;border-color:#2a2a5a;color:#88f}
+.cbtn.grn{background:#1a3a1a;border-color:#2a5a2a;color:#7c7}
+.cbtn.blu{background:#1a1a3a;border-color:#2a2a5a;color:#88f}
+.geo-w{margin-top:4px;font-size:9px;color:#e07050;background:#2a1515;padding:2px 8px;border-radius:4px;display:none}
 
-.geo-w{margin-top:6px;font-size:10px;color:#e07050;background:#2a1515;padding:3px 8px;border-radius:4px;display:none}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid #2a2020;position:sticky;top:0;z-index:99;background:#0f0f0f}
+.tab{flex:1;text-align:center;padding:10px 4px;font-size:12px;font-weight:700;color:#666;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.tab.on{color:#e8c4c4;border-bottom-color:#c0392b}
+.tab .badge{background:#c0392b;color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:3px}
 
-.filters{display:flex;gap:4px;padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* Filters */
+.filters{display:flex;gap:4px;padding:6px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .filters::-webkit-scrollbar{display:none}
-.ftab{background:#1a1a1a;color:#888;border:1px solid #2a2a2a;border-radius:12px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ftab{background:#1a1a1a;color:#888;border:1px solid #2a2a2a;border-radius:12px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .ftab.on{background:#3a1515;color:#e8a0a0;border-color:#5a2020}
 
+/* Route info bar */
+.route-info{background:#1a1a10;border:1px solid #3a3a20;margin:8px 10px;border-radius:8px;padding:10px 12px;display:none}
+.route-info.show{display:block}
+.ri-title{font-size:11px;color:#a0a060;font-weight:700}
+.ri-stats{display:flex;gap:12px;margin-top:4px}
+.ri-stat{font-size:18px;font-weight:800;color:#d4c870}.ri-unit{font-size:10px;color:#8a8a50;margin-left:2px}
+.ri-sub{font-size:10px;color:#6a6a40;margin-top:2px}
+.ri-btns{display:flex;gap:6px;margin-top:8px}
+.ri-btn{flex:1;padding:8px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer}
+.ri-btn.primary{background:linear-gradient(135deg,#5a5a10,#7a7a20);color:#fff}
+.ri-btn.secondary{background:#252520;color:#aaa;border:1px solid #3a3a30}
+.ri-btn:active{filter:brightness(.85)}
+.ri-btn:disabled{opacity:.4;cursor:default}
+.ri-loading{font-size:10px;color:#a0a060;margin-top:6px;display:none}
+.ri-loading.show{display:block}
+
+/* Cards */
 .cards{padding:0 10px}
-.card{background:#1c1816;border:1px solid #2a2420;border-radius:10px;margin-bottom:8px;overflow:hidden;transition:opacity .3s}
-.card.done{opacity:.55}
-.card-head{padding:12px;cursor:pointer;display:flex;align-items:flex-start;gap:10px}
+.card{background:#1c1816;border:1px solid #2a2420;border-radius:10px;margin-bottom:7px;overflow:hidden;transition:opacity .3s}
+.card.done{opacity:.5}
+.card.planned{border-color:#3a3a20}
+.card-head{padding:10px 12px;cursor:pointer;display:flex;align-items:flex-start;gap:8px}
 .card-left{flex:1;min-width:0}
-.card-tags{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.ptag{color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;letter-spacing:.04em}
-.ntag{font-size:10px;color:#6a5a50}
-.dtag{font-size:10px;color:#8a7a6a}
-.card-name{font-size:14px;font-weight:700;margin-top:3px;color:#e8ddd0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-tags{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.ptag{color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;letter-spacing:.03em}
+.ntag{font-size:9px;color:#6a5a50}
+.dtag{font-size:9px;color:#8a7a6a}
+.plan-num{background:#5a5a10;color:#d4c870;font-size:9px;font-weight:800;padding:1px 5px;border-radius:3px}
+.card-name{font-size:13px;font-weight:700;margin-top:2px;color:#e8ddd0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card.done .card-name{color:#777}
-.card-brew{font-size:12px;color:#c8a880;margin-top:1px}
+.card-brew{font-size:11px;color:#c8a880;margin-top:1px}
 .card.done .card-brew{color:#666}
-.card-sake-preview{font-size:10px;color:#7a6a5a;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.card-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.chk{width:30px;height:30px;border-radius:50%;border:2px solid #4a3a2a;background:transparent;color:transparent;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.card-sake-preview{font-size:9px;color:#7a6a5a;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.plan-toggle{width:28px;height:28px;border-radius:6px;border:1.5px solid #4a4a20;background:transparent;color:#6a6a30;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.plan-toggle.on{background:#3a3a10;border-color:#8a8a30;color:#d4c870}
+.chk{width:28px;height:28px;border-radius:50%;border:1.5px solid #4a3a2a;background:transparent;color:transparent;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .chk.on{border-color:#444;background:#2a4a2a;color:#6c6}
-.arrow{font-size:12px;color:#555;transition:transform .2s}
+.arrow{font-size:11px;color:#555;transition:transform .2s}
 .arrow.open{transform:rotate(90deg)}
 
+/* Card body */
 .card-body{display:none;padding:0 12px 12px;border-top:1px solid #252018}
 .card-body.open{display:block}
-
-.nav-btn{width:100%;background:linear-gradient(135deg,#8b2020,#a03030);color:#fff;border:none;border-radius:7px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:.04em}
+.nav-btn{width:100%;background:linear-gradient(135deg,#8b2020,#a03030);color:#fff;border:none;border-radius:6px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;margin-top:6px;letter-spacing:.04em}
 .nav-btn:active{filter:brightness(.85)}
-
-.section-label{font-size:10px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.1em;margin:12px 0 6px;font-weight:700}
-
-.sake-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #1a1815;flex-wrap:wrap}
-.sake-chk{width:22px;height:22px;border-radius:4px;border:1.5px solid #4a3a2a;background:transparent;color:transparent;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-label{font-size:9px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.1em;margin:10px 0 4px;font-weight:700}
+.sake-item{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #1a1815}
+.sake-chk{width:20px;height:20px;border-radius:3px;border:1.5px solid #4a3a2a;background:transparent;color:transparent;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sake-chk.on{background:#3a2a1a;border-color:#8a6a3a;color:#d4a050}
-.sake-name{flex:1;font-size:12px;color:#c8b8a8;min-width:0}
-.sake-ctrls{display:flex;align-items:center;gap:4px}
-.cup-btn{width:24px;height:24px;border-radius:50%;border:1px solid #3a3020;background:#1a1510;color:#a89060;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.cup-cnt{font-size:12px;color:#d4a050;min-width:16px;text-align:center;font-weight:700}
+.sake-name{flex:1;font-size:11px;color:#c8b8a8;min-width:0}
+.sake-ctrls{display:flex;align-items:center;gap:3px}
+.cup-btn{width:22px;height:22px;border-radius:50%;border:1px solid #3a3020;background:#1a1510;color:#a89060;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cup-cnt{font-size:11px;color:#d4a050;min-width:14px;text-align:center;font-weight:700}
+.stars-row{display:flex;align-items:center;justify-content:space-between;padding:1px 0 3px 26px}
 .stars{display:flex;gap:1px}
-.star{font-size:16px;cursor:pointer;color:#3a3020;line-height:1}
+.star{font-size:14px;cursor:pointer;color:#3a3020;line-height:1}
 .star.on{color:#d4a050}
-.sake-time{font-size:9px;color:#5a5040}
-
-.memo-area{margin-top:10px}
-.memo-input{width:100%;background:#151210;border:1px solid #2a2420;border-radius:6px;padding:8px;font-size:12px;color:#c8b8a8;font-family:inherit;resize:none;outline:none;min-height:36px}
+.sake-time{font-size:8px;color:#5a5040}
+.memo-area{margin-top:8px}
+.memo-input{width:100%;background:#151210;border:1px solid #2a2420;border-radius:5px;padding:6px;font-size:11px;color:#c8b8a8;resize:none;outline:none;min-height:32px}
 .memo-input:focus{border-color:#5a4a3a}
 .memo-input::placeholder{color:#4a3a2a}
-
-.return-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
-.return-label{font-size:11px;color:#8a7a6a}
-.return-btn{padding:4px 10px;border-radius:12px;border:1px solid #3a3020;background:transparent;font-size:11px;cursor:pointer;color:#8a7a6a}
+.return-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.return-label{font-size:10px;color:#8a7a6a}
+.return-btn{padding:3px 9px;border-radius:10px;border:1px solid #3a3020;background:transparent;font-size:10px;cursor:pointer;color:#8a7a6a}
 .return-btn.on{background:#3a2a1a;border-color:#8a6a3a;color:#d4a050}
+.visit-time{font-size:9px;color:#5a5040;margin-top:4px}
 
-.visit-time{font-size:10px;color:#5a5040;margin-top:6px}
+/* Footer */
+.footer{text-align:center;font-size:9px;color:#3a2a20;padding:16px 14px}
+.export-btn{background:#222;color:#888;border:1px solid #333;border-radius:5px;padding:5px 12px;font-size:10px;cursor:pointer;margin-top:6px}
 
-.footer{text-align:center;font-size:10px;color:#3a2a20;padding:20px 14px}
-.export-btn{background:#222;color:#888;border:1px solid #333;border-radius:6px;padding:6px 14px;font-size:11px;cursor:pointer;margin-top:8px}
+/* Empty state */
+.empty{text-align:center;padding:40px 20px;color:#4a3a2a;font-size:13px;line-height:1.8}
 </style>
 </head>
 <body>
 
 <div class="hdr">
- <div class="hdr-top"><h1>🍶 利き歩きナビ</h1><span class="sub">全52店｜2026.04.25</span></div>
+ <div class="hdr-top"><h1>🍶 利き歩きナビ</h1><span class="sub">v2｜全52店｜2026.04.25</span></div>
  <div class="hdr-row">
   <span class="stat" id="stat"></span>
   <span class="stat">🍶 <b id="cupStat">0</b>杯</span>
  </div>
  <div class="pbar"><div class="pbar-fill" id="pbar"></div></div>
  <div class="ctrls">
-  <button class="cbtn" id="sortBtn" onclick="toggleSort()">📋 ルート順</button>
-  <button class="cbtn map-btn" id="mapBtn" onclick="toggleMap()"></button>
-  <button class="cbtn" onclick="exportData()">📤 記録を保存</button>
+  <button class="cbtn" id="sortBtn" onclick="toggleSort()">📋 番号順</button>
+  <button class="cbtn" id="mapBtn" onclick="toggleMap()"></button>
+  <button class="cbtn" onclick="exportData()">📤 記録</button>
  </div>
  <div class="geo-w" id="geoW">⚠ 位置情報を許可すると距離表示</div>
+</div>
+
+<div class="tabs">
+ <div class="tab on" id="tabAll" onclick="setTab('all')">全店舗</div>
+ <div class="tab" id="tabPlan" onclick="setTab('plan')">マイプラン<span class="badge" id="planBadge" style="display:none"></span></div>
+ <div class="tab" id="tabLog" onclick="setTab('log')">記録</div>
+</div>
+
+<div id="routeInfo" class="route-info">
+ <div class="ri-title" id="riTitle">📐 ルート情報</div>
+ <div class="ri-stats">
+  <div><span class="ri-stat" id="riDist">-</span><span class="ri-unit">km</span></div>
+  <div><span class="ri-stat" id="riTime">-</span><span class="ri-unit">分</span></div>
+  <div><span class="ri-stat" id="riStops">-</span><span class="ri-unit">店</span></div>
+ </div>
+ <div class="ri-sub" id="riSub"></div>
+ <div class="ri-btns">
+  <button class="ri-btn primary" id="optBtn" onclick="optimizeRoute()">🔄 ルート最適化（OSRM）</button>
+  <button class="ri-btn secondary" onclick="reoptFromHere()">📍 現在地から再計算</button>
+ </div>
+ <div class="ri-loading" id="riLoad">⏳ OSRM サーバーに問い合わせ中…</div>
 </div>
 
 <div class="filters" id="filters"></div>
@@ -111,30 +158,32 @@ button{font-family:inherit}
 
 <div class="footer">
  第10回 日本酒利き歩き 2026.04.25 14:00-18:00 日本橋エリア<br>
- <button class="export-btn" onclick="exportData()">📤 テイスティングノートを書き出し</button>
+ OSRM (Open Source Routing Machine) で実歩行距離を計算<br>
+ <button class="export-btn" onclick="exportData()">📤 テイスティングノート書き出し</button>
 </div>
 
 <script>
+/* ── Store Data ── */
 const S=[
 {id:1,n:"室町砂場",b:"龍勢",p:"広島",s:["龍勢 和みの辛口","活濁酒","別格品 山田錦"],la:35.6870,lo:139.7728},
-{id:2,n:"亀とみ",b:"雄東正宗・鴎樹",p:"栃木",s:["雄東 純米吟醸 雄町","鴎樹 生酛造り 純米大吟醸"],la:35.6867,lo:139.7740},
+{id:2,n:"亀とみ",b:"雄東正宗・鴎樹",p:"栃木",s:["雄東 純米吟醸 雄町","鴎樹 生酛 純米大吟醸"],la:35.6867,lo:139.7740},
 {id:3,n:"ホテルかずさや",b:"花邑・翠玉",p:"秋田",s:["花邑 純米吟醸 美郷錦","花邑 純米吟醸 酒未来","両関 純米大吟醸"],la:35.6898,lo:139.7746},
-{id:4,n:"JUSTA BURGER",b:"酉与右衛門",p:"岩手",s:["酉与右衛門 特別純米 生原酒 吟ぎんが","酉与右衛門 特別純米 生原酒 美山錦"],la:35.6885,lo:139.7745},
+{id:4,n:"JUSTA BURGER",b:"酉与右衛門",p:"岩手",s:["酉与右衛門 特別純米 吟ぎんが","酉与右衛門 特別純米 美山錦"],la:35.6885,lo:139.7745},
 {id:5,n:"三重テラス",b:"天一・天慶/若戎/宮の雪",p:"三重",s:["天慶 純米大吟醸","義左衛門 純米吟醸","宮の雪 純米吟醸"],la:35.6868,lo:139.7718},
 {id:6,n:"レストラン桂",b:"谷泉",p:"石川",s:["谷泉 純米","谷泉×手取川 山廃貴醸酒","鶴と福 2026"],la:35.6862,lo:139.7730},
 {id:7,n:"室町 美はま",b:"臥龍梅",p:"静岡",s:["Garyubai Sparkling","臥龍梅 純米大吟醸 山田錦35"],la:35.6860,lo:139.7745},
-{id:8,n:"麦酒庵 日本橋本町店",b:"旭鳳",p:"広島",s:["旭鳳 純米大吟醸 八反錦","大吟醸 雄町 大古酒 1992年"],la:35.6900,lo:139.7768},
+{id:8,n:"麦酒庵",b:"旭鳳",p:"広島",s:["旭鳳 純米大吟醸 八反錦","大吟醸 雄町 大古酒 1992年"],la:35.6900,lo:139.7768},
 {id:9,n:"食の會 日本橋",b:"吟田川",p:"新潟",s:["吟田川 純米吟醸","レッツゴー吟田川 本醸造 生原酒"],la:35.6858,lo:139.7730},
-{id:10,n:"室町 福は内",b:"杜來",p:"青森",s:["杜來 特別純米酒 超辛口","杜來 山廃仕込","JOPPARI"],la:35.6855,lo:139.7753},
+{id:10,n:"室町 福は内",b:"杜來",p:"青森",s:["杜來 特別純米 超辛口","杜來 山廃仕込","JOPPARI"],la:35.6855,lo:139.7753},
 {id:11,n:"御清水庵 清恵",b:"越前岬",p:"福井",s:["越前岬 大吟醸 吟の雫","純米大吟醸 山田錦"],la:35.6892,lo:139.7738},
 {id:12,n:"イチノイチノイチ",b:"作",p:"三重",s:["作 穂乃智","作 玄乃智","作 恵乃智","作 雅乃智中取り"],la:35.6838,lo:139.7745},
 {id:13,n:"HIMIT",b:"池雲・加佐一陽",p:"京都",s:["池雲 純米大吟醸 金ラベル","加佐一陽 純米 生原酒"],la:35.6915,lo:139.7768},
 {id:14,n:"THIDA BASE",b:"常山",p:"福井",s:["常山 純米 辛口","純米吟醸 飛","新諸白 生"],la:35.6908,lo:139.7775},
-{id:15,n:"カミヤ酒場",b:"RYUSUISEN",p:"長野",s:["RYUSUISEN 氷筍水仕込 ひとごこち","nova 生もと"],la:35.6912,lo:139.7788},
+{id:15,n:"カミヤ酒場",b:"RYUSUISEN",p:"長野",s:["RYUSUISEN 氷筍水仕込","nova 生もと"],la:35.6912,lo:139.7788},
 {id:16,n:"キタデタコス",b:"萩錦",p:"静岡",s:["萩錦 純米大吟醸 にごり酒","WIP2024","土地の詩"],la:35.6900,lo:139.7780},
 {id:17,n:"ANDON",b:"若葉",p:"岐阜",s:["若葉 二十年古酒","純米大吟醸 酔むすび","大いばり"],la:35.6890,lo:139.7773},
 {id:18,n:"timsum",b:"土田",p:"群馬",s:["シン・ツチダ","土田 麹99％","研究醸造35"],la:35.6888,lo:139.7782},
-{id:19,n:"BnA_WALL",b:"一念不動・蓬莱泉",p:"愛知",s:["蓬莱泉 純米大吟醸 摩訶","蓬莱泉 空","一念不動 夢山水"],la:35.6882,lo:139.7785},
+{id:19,n:"BnA_WALL",b:"蓬莱泉・一念不動",p:"愛知",s:["蓬莱泉 純米大吟醸 摩訶","蓬莱泉 空","一念不動 夢山水"],la:35.6882,lo:139.7785},
 {id:20,n:"おそば髙松",b:"上喜元",p:"山形",s:["上喜元 大吟醸 山田錦35","純米吟醸 渾身"],la:35.6880,lo:139.7793},
 {id:21,n:"竹とんぼ",b:"吉乃川・みなも",p:"新潟",s:["みなも 中汲み 純米大吟醸","極上吉乃川 吟醸"],la:35.6877,lo:139.7790},
 {id:22,n:"鰻 高嶋家",b:"綿屋",p:"宮城",s:["綿屋 純米大吟醸 千日酒","純米吟醸 雄町 55"],la:35.6873,lo:139.7783},
@@ -170,186 +219,316 @@ const S=[
 {id:52,n:"炭手前 鷽",b:"三千盛",p:"岐阜",s:["三千盛 最上大業物","業物","純米ドライ"],la:35.6832,lo:139.7862}
 ];
 
-const REGIONS={"東北":["青森","岩手","秋田","山形","宮城","福島"],"関東":["栃木","群馬","埼玉","千葉","茨城","神奈川"],"中部":["新潟","長野","富山","石川","福井","静岡","岐阜","愛知"],"近畿":["三重","京都","滋賀","奈良","兵庫"],"中国・四国":["広島","岡山","島根","山口","愛媛","高知"],"九州":["佐賀"]};
+const REGIONS={"東北":["青森","岩手","秋田","山形","宮城","福島"],"関東":["栃木","群馬","埼玉","千葉","茨城","神奈川"],"中部":["新潟","長野","富山","石川","福井","静岡","岐阜","愛知"],"近畿":["三重","京都","滋賀","奈良","兵庫"],"中国四国":["広島","岡山","島根","山口","愛媛","高知"],"九州":["佐賀"]};
 const PC={"青森":"#2563eb","岩手":"#059669","秋田":"#d97706","山形":"#dc2626","宮城":"#7c3aed","福島":"#0891b2","栃木":"#65a30d","群馬":"#ca8a04","埼玉":"#0d9488","千葉":"#e11d48","茨城":"#4f46e5","神奈川":"#0284c7","新潟":"#2563eb","長野":"#059669","富山":"#7c3aed","石川":"#0891b2","福井":"#ca8a04","静岡":"#16a34a","岐阜":"#9333ea","愛知":"#dc2626","三重":"#d97706","京都":"#be185d","滋賀":"#0d9488","奈良":"#9333ea","兵庫":"#1d4ed8","広島":"#b91c1c","岡山":"#a16207","島根":"#065f46","山口":"#7c2d12","愛媛":"#ea580c","高知":"#15803d","佐賀":"#6d28d9"};
+const OSRM="https://router.project-osrm.org";
+const START={la:35.6880,lo:139.7742}; // 受付：室町四丁目有吉 付近
 
-let data,pos=null,sortDist=false,filter="all",openId=null;
+/* ── State ── */
+let data,pos=null,sortDist=false,curTab="all",regionFilter="all",openId=null;
 
-function load(){try{data=JSON.parse(localStorage.getItem("kiki2026"))||{}}catch(e){data={}}if(!data.mapPref)data.mapPref="google";if(!data.stores)data.stores={}}
-function save(){try{localStorage.setItem("kiki2026",JSON.stringify(data))}catch(e){}}
+function load(){try{data=JSON.parse(localStorage.getItem("kiki2026v2"))||{}}catch(e){data={}}
+  if(!data.mapPref)data.mapPref="google";
+  if(!data.stores)data.stores={};
+  if(!data.plan)data.plan={ids:[],optimized:false,totalDist:null,totalTime:null};
+}
+function save(){try{localStorage.setItem("kiki2026v2",JSON.stringify(data))}catch(e){}}
 function gs(id){if(!data.stores[id])data.stores[id]={visited:false,visitTime:null,memo:"",wantReturn:false,drinks:{}};return data.stores[id]}
 
-function dist(a,b,c,d){const R=6371e3,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180;const x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+/* ── Utilities ── */
+function gdist(a,b,c,d){const R=6371e3,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180;const x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
 function fd(m){return m<1000?Math.round(m)+"m":(m/1000).toFixed(1)+"km"}
+function walkMin(m){return Math.round(m/80)}
 function now(){const d=new Date();return d.getHours()+":"+String(d.getMinutes()).padStart(2,"0")}
+function navUrl(la,lo){return data.mapPref==="apple"?"https://maps.apple.com/?daddr="+la+","+lo+"&dirflg=w":"https://www.google.com/maps/dir/?api=1&destination="+la+","+lo+"&travelmode=walking"}
+function prefColor(p){return PC[p.split("/")[0].trim()]||"#666"}
+function mainPref(p){return p.split("/")[0].trim()}
+function getRegion(p){for(const[r,a]of Object.entries(REGIONS))for(const pp of p.split("/"))if(a.includes(pp.trim()))return r;return"他"}
+function totalCups(){let c=0;for(const st of Object.values(data.stores))for(const d of Object.values(st.drinks||{}))c+=(d.cups||0);return c}
+function isPlan(id){return data.plan.ids.includes(id)}
+function planIdx(id){return data.plan.ids.indexOf(id)}
 
-function navUrl(la,lo){
-  if(data.mapPref==="apple")return"https://maps.apple.com/?daddr="+la+","+lo+"&dirflg=w";
-  return"https://www.google.com/maps/dir/?api=1&destination="+la+","+lo+"&travelmode=walking";
+/* ── OSRM API ── */
+async function osrmTrip(coords,fromCurrent){
+  // coords: [{la, lo}, ...]
+  const cs=coords.map(c=>c.lo+","+c.la).join(";");
+  const params="roundtrip=false&source=first&geometries=geojson&overview=false";
+  const url=`${OSRM}/trip/v1/driving/${cs}?${params}`;
+  const res=await fetch(url);
+  const j=await res.json();
+  if(j.code!=="Ok")throw new Error(j.message||"OSRM error");
+  const trip=j.trips[0];
+  // Build optimized order from waypoint_index
+  const order=j.waypoints.map(w=>({origIdx:j.waypoints.indexOf(w),wpIdx:w.waypoint_index}))
+    .sort((a,b)=>a.wpIdx-b.wpIdx)
+    .map(w=>w.origIdx);
+  return {order,distance:trip.distance,duration:trip.duration};
 }
 
-function toggleSort(){sortDist=!sortDist;render()}
-function toggleMap(){data.mapPref=data.mapPref==="google"?"apple":"google";save();renderCtrls()}
+async function osrmTable(from,tos){
+  // Returns walking distances from 'from' to each 'to'
+  const all=[from,...tos];
+  const cs=all.map(c=>c.lo+","+c.la).join(";");
+  const dests=tos.map((_,i)=>i+1).join(";");
+  const url=`${OSRM}/table/v1/driving/${cs}?sources=0&destinations=${dests}&annotations=distance`;
+  const res=await fetch(url);
+  const j=await res.json();
+  if(j.code!=="Ok")throw new Error(j.message||"OSRM error");
+  return j.distances[0]; // array of distances in meters
+}
 
-function toggleVisit(id,e){e&&e.stopPropagation();const st=gs(id);st.visited=!st.visited;st.visitTime=st.visited?now():null;save();render()}
+/* ── Route Optimization ── */
+async function optimizeRoute(){
+  const ids=data.plan.ids.filter(id=>!gs(id).visited);
+  if(ids.length<2){alert("最適化には未訪問の2店以上が必要です");return}
+  showLoading(true);
+  try{
+    const coords=[{la:START.la,lo:START.lo},...ids.map(id=>{const s=S.find(x=>x.id===id);return{la:s.la,lo:s.lo}})];
+    const result=await osrmTrip(coords);
+    // order[0] is start point, reorder ids by order[1..n]
+    const reordered=result.order.slice(1).map(i=>ids[i-1]).filter(Boolean);
+    // Keep visited stores at front, append reordered unvisited
+    const visitedIds=data.plan.ids.filter(id=>gs(id).visited);
+    data.plan.ids=[...visitedIds,...reordered];
+    data.plan.optimized=true;
+    data.plan.totalDist=result.distance;
+    data.plan.totalTime=result.duration;
+    save();render();
+  }catch(e){
+    alert("OSRM接続エラー: "+e.message+"\n\nネットワーク接続を確認してください");
+  }
+  showLoading(false);
+}
 
+async function reoptFromHere(){
+  if(!pos){alert("現在地が取得できていません");return}
+  const ids=data.plan.ids.filter(id=>!gs(id).visited);
+  if(ids.length<2){alert("未訪問2店以上が必要です");return}
+  showLoading(true);
+  try{
+    const coords=[{la:pos.lat,lo:pos.lng},...ids.map(id=>{const s=S.find(x=>x.id===id);return{la:s.la,lo:s.lo}})];
+    const result=await osrmTrip(coords);
+    const reordered=result.order.slice(1).map(i=>ids[i-1]).filter(Boolean);
+    const visitedIds=data.plan.ids.filter(id=>gs(id).visited);
+    data.plan.ids=[...visitedIds,...reordered];
+    data.plan.optimized=true;
+    data.plan.totalDist=result.distance;
+    data.plan.totalTime=result.duration;
+    save();render();
+  }catch(e){
+    alert("OSRM接続エラー: "+e.message);
+  }
+  showLoading(false);
+}
+
+function showLoading(on){document.getElementById("riLoad").className="ri-loading"+(on?" show":"")}
+
+/* OSRM distance cache */
+let distCache={},distCacheTime=0;
+async function updateOsrmDists(){
+  if(!pos)return;
+  const now=Date.now();
+  if(now-distCacheTime<60000)return; // cache 1 min
+  const ids=getVisibleIds();
+  if(ids.length===0)return;
+  try{
+    const tos=ids.map(id=>{const s=S.find(x=>x.id===id);return{la:s.la,lo:s.lo}});
+    const dists=await osrmTable({la:pos.lat,lo:pos.lng},tos);
+    ids.forEach((id,i)=>{distCache[id]=dists[i]});
+    distCacheTime=now;
+    render();
+  }catch(e){/* silently fail, use straight-line */}
+}
+function getVisibleIds(){
+  if(curTab==="plan")return data.plan.ids;
+  return S.map(s=>s.id);
+}
+
+/* ── Actions ── */
+function setTab(t){curTab=t;regionFilter="all";openId=null;render()}
+function toggleSort(){sortDist=!sortDist;if(sortDist&&pos)updateOsrmDists();render()}
+function toggleMap(){data.mapPref=data.mapPref==="google"?"apple":"google";save();render()}
+function setRegion(r){regionFilter=r;render()}
 function toggleOpen(id){openId=openId===id?null:id;render()}
 
+function togglePlan(id,e){e&&e.stopPropagation();
+  if(isPlan(id)){data.plan.ids=data.plan.ids.filter(x=>x!==id);data.plan.optimized=false}
+  else{data.plan.ids.push(id);data.plan.optimized=false}
+  save();render();
+}
+function toggleVisit(id,e){e&&e.stopPropagation();const st=gs(id);st.visited=!st.visited;st.visitTime=st.visited?now():null;save();render()}
 function toggleDrink(sid,di,e){e&&e.stopPropagation();const st=gs(sid);if(!st.drinks[di])st.drinks[di]={cups:0,time:null,rating:0};const d=st.drinks[di];if(d.cups===0){d.cups=1;d.time=now()}else{d.cups=0;d.time=null;d.rating=0}save();render()}
-
 function addCup(sid,di,delta,e){e&&e.stopPropagation();const st=gs(sid);if(!st.drinks[di])st.drinks[di]={cups:0,time:null,rating:0};const d=st.drinks[di];d.cups=Math.max(0,d.cups+delta);if(d.cups>0&&!d.time)d.time=now();if(d.cups===0){d.time=null;d.rating=0}save();render()}
-
 function setRating(sid,di,r,e){e&&e.stopPropagation();const st=gs(sid);if(!st.drinks[di])st.drinks[di]={cups:0,time:null,rating:0};st.drinks[di].rating=st.drinks[di].rating===r?0:r;save();render()}
-
 function setMemo(sid,v){gs(sid).memo=v;save()}
-function toggleReturn(sid){const st=gs(sid);st.wantReturn=!st.wantReturn;save();render()}
+function toggleReturn(sid){gs(sid).wantReturn=!gs(sid).wantReturn;save();render()}
 
-function getRegion(p){const ps=p.split("/");for(const[r,arr]of Object.entries(REGIONS)){for(const pp of ps)if(arr.includes(pp.trim()))return r}return"他"}
-function prefColor(p){const ps=p.split("/");return PC[ps[0].trim()]||"#666"}
-
-function totalCups(){let c=0;for(const[,st]of Object.entries(data.stores))for(const[,d]of Object.entries(st.drinks))c+=d.cups;return c}
-
-function renderCtrls(){
+/* ── Render ── */
+function render(){
+  // Header
+  const vc=S.filter(s=>gs(s.id).visited).length;
+  document.getElementById("stat").innerHTML=vc===52?"🎉 全店制覇！":"訪問 <b>"+vc+"</b>/52";
+  document.getElementById("cupStat").textContent=totalCups();
+  document.getElementById("pbar").style.width=(vc/52*100)+"%";
+  
   const mb=document.getElementById("mapBtn");
-  const isA=data.mapPref==="apple";
-  mb.textContent=isA?"🍎 Apple Maps":"🗺 Google Maps";
-  mb.className="cbtn map-btn"+(isA?" apple":"");
+  mb.textContent=data.mapPref==="apple"?"🍎 Apple":"🗺 Google";
+  mb.className="cbtn "+(data.mapPref==="apple"?"blu":"grn");
+  
   const sb=document.getElementById("sortBtn");
   sb.textContent=sortDist?"📍 近い順":"📋 番号順";
   sb.className="cbtn"+(sortDist?" on":"");
-}
+  
+  // Tabs
+  document.getElementById("tabAll").className="tab"+(curTab==="all"?" on":"");
+  document.getElementById("tabPlan").className="tab"+(curTab==="plan"?" on":"");
+  document.getElementById("tabLog").className="tab"+(curTab==="log"?" on":"");
+  const pb=document.getElementById("planBadge");
+  if(data.plan.ids.length>0){pb.style.display="inline";pb.textContent=data.plan.ids.length}else{pb.style.display="none"}
 
-function renderFilters(){
-  const f=document.getElementById("filters");
-  const tabs=[{k:"all",l:"全52店"},{k:"unvisited",l:"未訪問"},{k:"visited",l:"訪問済"},{k:"東北",l:"東北"},{k:"関東",l:"関東"},{k:"中部",l:"中部"},{k:"近畿",l:"近畿"},{k:"中国・四国",l:"中国四国"},{k:"九州",l:"九州"}];
-  f.innerHTML=tabs.map(t=>`<button class="ftab${filter===t.k?" on":""}" onclick="setFilter('${t.k}')">${t.l}</button>`).join("");
-}
+  // Route info
+  const ri=document.getElementById("routeInfo");
+  if(curTab==="plan"&&data.plan.ids.length>0){
+    ri.className="route-info show";
+    const unv=data.plan.ids.filter(id=>!gs(id).visited).length;
+    document.getElementById("riStops").textContent=unv;
+    if(data.plan.totalDist!=null){
+      document.getElementById("riDist").textContent=(data.plan.totalDist/1000).toFixed(1);
+      document.getElementById("riTime").textContent=walkMin(data.plan.totalDist);
+      document.getElementById("riSub").textContent=data.plan.optimized?"✅ OSRM最適化済み（歩行距離は道路ベース）":"⚡ 未最適化";
+    }else{
+      // estimate from straight line
+      let est=0;const pids=data.plan.ids.filter(id=>!gs(id).visited);
+      let prev=START;
+      pids.forEach(id=>{const s=S.find(x=>x.id===id);est+=gdist(prev.la,prev.lo,s.la,s.lo);prev={la:s.la,lo:s.lo}});
+      document.getElementById("riDist").textContent=(est/1000).toFixed(1);
+      document.getElementById("riTime").textContent=walkMin(est);
+      document.getElementById("riSub").textContent="📏 直線距離ベース（最適化で改善可能）";
+    }
+    document.getElementById("riTitle").textContent=data.plan.optimized?"✅ 最適化済みルート":"📐 ルート概算";
+  }else{ri.className="route-info"}
 
-function setFilter(f){filter=f;render()}
+  // Filters
+  const ff=document.getElementById("filters");
+  if(curTab==="all"){
+    const tabs=[{k:"all",l:"全て"},...Object.keys(REGIONS).map(r=>({k:r,l:r}))];
+    ff.innerHTML=tabs.map(t=>`<button class="ftab${regionFilter===t.k?" on":""}" onclick="setRegion('${t.k}')">${t.l}</button>`).join("");
+    ff.style.display="flex";
+  }else{ff.style.display="none"}
 
-function render(){
-  renderCtrls();renderFilters();
-
-  let stores=[...S];
-  if(filter==="visited")stores=stores.filter(s=>gs(s.id).visited);
-  else if(filter==="unvisited")stores=stores.filter(s=>!gs(s.id).visited);
-  else if(filter!=="all")stores=stores.filter(s=>getRegion(s.p)===filter);
+  // Cards
+  let stores=[];
+  if(curTab==="plan"){
+    stores=data.plan.ids.map(id=>S.find(s=>s.id===id)).filter(Boolean);
+  }else if(curTab==="log"){
+    stores=S.filter(s=>gs(s.id).visited);
+  }else{
+    stores=[...S];
+    if(regionFilter!=="all")stores=stores.filter(s=>getRegion(s.p)===regionFilter);
+  }
 
   if(sortDist&&pos){
     stores.sort((a,b)=>{
       const av=gs(a.id).visited?1:0,bv=gs(b.id).visited?1:0;
       if(av!==bv)return av-bv;
-      return dist(pos.lat,pos.lng,a.la,a.lo)-dist(pos.lat,pos.lng,b.la,b.lo);
+      const da=distCache[a.id]||gdist(pos.lat,pos.lng,a.la,a.lo);
+      const db=distCache[b.id]||gdist(pos.lat,pos.lng,b.la,b.lo);
+      return da-db;
     });
   }
 
-  const vc=S.filter(s=>gs(s.id).visited).length;
-  document.getElementById("stat").innerHTML=`${vc===52?"🎉 全店制覇！":"訪問 <b>"+vc+"</b> / 52 店"}`;
-  document.getElementById("cupStat").textContent=totalCups();
-  document.getElementById("pbar").style.width=(vc/52*100)+"%";
-
   const c=document.getElementById("cards");
-  c.innerHTML=stores.map(s=>{
-    const st=gs(s.id);
-    const done=st.visited;
-    const d=pos?dist(pos.lat,pos.lng,s.la,s.lo):null;
-    const pc=prefColor(s.p);
-    const isOpen=openId===s.id;
-    const mainPref=s.p.split("/")[0].trim();
-    const drunkCount=Object.values(st.drinks).reduce((a,d)=>a+d.cups,0);
+  if(stores.length===0){
+    if(curTab==="plan")c.innerHTML='<div class="empty">プランが空です<br>「全店舗」タブで ＋ を押して追加</div>';
+    else if(curTab==="log")c.innerHTML='<div class="empty">まだ訪問した店がありません</div>';
+    else c.innerHTML='<div class="empty">該当なし</div>';
+    return;
+  }
 
-    let html=`<div class="card${done?" done":""}">`;
-    html+=`<div class="card-head" onclick="toggleOpen(${s.id})">`;
-    html+=`<div class="card-left">`;
-    html+=`<div class="card-tags"><span class="ptag" style="background:${pc}">${mainPref}</span><span class="ntag">No.${s.id}</span>`;
-    if(d!=null)html+=`<span class="dtag">📍${fd(d)}</span>`;
-    if(drunkCount>0)html+=`<span class="dtag">🍶${drunkCount}杯</span>`;
-    html+=`</div>`;
-    html+=`<div class="card-name">${s.n}</div>`;
-    html+=`<div class="card-brew">${s.b}（${s.p}）</div>`;
-    if(!isOpen)html+=`<div class="card-sake-preview">${s.s.join("、")}</div>`;
-    html+=`</div>`;
-    html+=`<div class="card-right">`;
-    html+=`<button class="chk${done?" on":""}" onclick="toggleVisit(${s.id},event)">${done?"✓":""}</button>`;
-    html+=`<span class="arrow${isOpen?" open":""}">▶</span>`;
-    html+=`</div></div>`;
+  c.innerHTML=stores.map((s,idx)=>{
+    const st=gs(s.id);const done=st.visited;
+    const d=pos?(distCache[s.id]||gdist(pos.lat,pos.lng,s.la,s.lo)):null;
+    const pc=prefColor(s.p);const isOpen=openId===s.id;
+    const drunkCnt=Object.values(st.drinks).reduce((a,d)=>a+(d.cups||0),0);
+    const inPlan=isPlan(s.id);
+    const pIdx=curTab==="plan"?idx:-1;
 
-    html+=`<div class="card-body${isOpen?" open":""}">`;
-    if(isOpen){
-      // Nav button
-      html+=`<button class="nav-btn" onclick="window.open('${navUrl(s.la,s.lo)}','_blank')">${data.mapPref==="apple"?"🍎 Apple Maps":"🗺 Google Maps"} でナビ開始</button>`;
-
-      // Visit time
-      if(st.visitTime)html+=`<div class="visit-time">✅ ${st.visitTime} にチェックイン</div>`;
-
-      // Sake list
-      html+=`<div class="section-label">出品酒</div>`;
-      s.s.forEach((sk,i)=>{
-        const dk=st.drinks[i]||{cups:0,time:null,rating:0};
-        const on=dk.cups>0;
-        html+=`<div class="sake-item">`;
-        html+=`<button class="sake-chk${on?" on":""}" onclick="toggleDrink(${s.id},${i},event)">${on?"✓":""}</button>`;
-        html+=`<span class="sake-name">${sk}</span>`;
-        html+=`<div class="sake-ctrls">`;
-        html+=`<button class="cup-btn" onclick="addCup(${s.id},${i},-1,event)">−</button>`;
-        html+=`<span class="cup-cnt">${dk.cups}</span>`;
-        html+=`<button class="cup-btn" onclick="addCup(${s.id},${i},1,event)">＋</button>`;
-        html+=`</div>`;
-        html+=`</div>`;
-        // Stars + time row
-        html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:2px 0 4px 30px">`;
-        html+=`<div class="stars">`;
-        for(let r=1;r<=5;r++)html+=`<span class="star${dk.rating>=r?" on":""}" onclick="setRating(${s.id},${i},${r},event)">★</span>`;
-        html+=`</div>`;
-        if(dk.time)html+=`<span class="sake-time">${dk.time}</span>`;
-        html+=`</div>`;
-      });
-
-      // Memo
-      html+=`<div class="memo-area"><div class="section-label">メモ</div>`;
-      html+=`<textarea class="memo-input" placeholder="感想、店の雰囲気など…" oninput="setMemo(${s.id},this.value)">${st.memo||""}</textarea></div>`;
-
-      // Want return
-      html+=`<div class="return-row"><span class="return-label">次回も行きたい？</span>`;
-      html+=`<button class="return-btn${st.wantReturn?" on":""}" onclick="toggleReturn(${s.id})">${st.wantReturn?"⭐ また行く":"☆ 未設定"}</button></div>`;
+    let h=`<div class="card${done?" done":""}${inPlan?" planned":""}">`;
+    h+=`<div class="card-head" onclick="toggleOpen(${s.id})"><div class="card-left"><div class="card-tags">`;
+    if(pIdx>=0)h+=`<span class="plan-num">${pIdx+1}</span>`;
+    h+=`<span class="ptag" style="background:${pc}">${mainPref(s.p)}</span>`;
+    h+=`<span class="ntag">No.${s.id}</span>`;
+    if(d!=null){
+      const isOsrm=!!distCache[s.id];
+      h+=`<span class="dtag">${isOsrm?"🚶":"📍"}${fd(d)}${isOsrm?" ~"+walkMin(d)+"分":""}</span>`;
     }
-    html+=`</div></div>`;
-    return html;
+    if(drunkCnt>0)h+=`<span class="dtag">🍶${drunkCnt}</span>`;
+    h+=`</div><div class="card-name">${s.n}</div>`;
+    h+=`<div class="card-brew">${s.b}（${s.p}）</div>`;
+    if(!isOpen)h+=`<div class="card-sake-preview">${s.s.join("、")}</div>`;
+    h+=`</div><div class="card-right">`;
+    if(curTab!=="log")h+=`<button class="plan-toggle${inPlan?" on":""}" onclick="togglePlan(${s.id},event)" title="プランに追加">${inPlan?"★":"＋"}</button>`;
+    h+=`<button class="chk${done?" on":""}" onclick="toggleVisit(${s.id},event)">${done?"✓":""}</button>`;
+    h+=`<span class="arrow${isOpen?" open":""}">▶</span>`;
+    h+=`</div></div>`;
+
+    h+=`<div class="card-body${isOpen?" open":""}">`;
+    if(isOpen){
+      h+=`<button class="nav-btn" onclick="window.open('${navUrl(s.la,s.lo)}','_blank')">${data.mapPref==="apple"?"🍎 Apple Maps":"🗺 Google Maps"} でナビ</button>`;
+      if(st.visitTime)h+=`<div class="visit-time">✅ ${st.visitTime} チェックイン</div>`;
+      h+=`<div class="section-label">出品酒</div>`;
+      s.s.forEach((sk,i)=>{
+        const dk=st.drinks[i]||{cups:0,time:null,rating:0};const on=dk.cups>0;
+        h+=`<div class="sake-item"><button class="sake-chk${on?" on":""}" onclick="toggleDrink(${s.id},${i},event)">${on?"✓":""}</button>`;
+        h+=`<span class="sake-name">${sk}</span>`;
+        h+=`<div class="sake-ctrls"><button class="cup-btn" onclick="addCup(${s.id},${i},-1,event)">−</button>`;
+        h+=`<span class="cup-cnt">${dk.cups}</span>`;
+        h+=`<button class="cup-btn" onclick="addCup(${s.id},${i},1,event)">＋</button></div></div>`;
+        h+=`<div class="stars-row"><div class="stars">`;
+        for(let r=1;r<=5;r++)h+=`<span class="star${dk.rating>=r?" on":""}" onclick="setRating(${s.id},${i},${r},event)">★</span>`;
+        h+=`</div>`;if(dk.time)h+=`<span class="sake-time">${dk.time}</span>`;h+=`</div>`;
+      });
+      h+=`<div class="memo-area"><div class="section-label">メモ</div>`;
+      h+=`<textarea class="memo-input" placeholder="感想、雰囲気など…" oninput="setMemo(${s.id},this.value)">${st.memo||""}</textarea></div>`;
+      h+=`<div class="return-row"><span class="return-label">次回も行きたい？</span>`;
+      h+=`<button class="return-btn${st.wantReturn?" on":""}" onclick="toggleReturn(${s.id})">${st.wantReturn?"⭐ また行く":"☆"}</button></div>`;
+    }
+    h+=`</div></div>`;
+    return h;
   }).join("");
 }
 
+/* ── Export ── */
 function exportData(){
-  let txt="# 日本酒利き歩き 2026 テイスティングノート\n";
-  txt+="# エクスポート: "+new Date().toLocaleString("ja-JP")+"\n\n";
+  let t="# 日本酒利き歩き 2026 テイスティングノート\n";
+  t+="# "+new Date().toLocaleString("ja-JP")+"\n\n";
+  if(data.plan.ids.length>0){
+    t+="## プラン（"+data.plan.ids.length+"店）\n";
+    data.plan.ids.forEach((id,i)=>{const s=S.find(x=>x.id===id);t+=`${i+1}. ${s.n}（${s.b}）${gs(id).visited?"✅":""}\n`});
+    if(data.plan.totalDist)t+=`総歩行距離: ${(data.plan.totalDist/1000).toFixed(1)}km / 約${walkMin(data.plan.totalDist)}分\n`;
+    t+="\n";
+  }
   let cups=0;
   S.forEach(s=>{
     const st=gs(s.id);
     if(!st.visited&&Object.keys(st.drinks).length===0&&!st.memo)return;
-    txt+=`## No.${s.id} ${s.n}｜${s.b}（${s.p}）\n`;
-    if(st.visitTime)txt+=`チェックイン: ${st.visitTime}\n`;
-    if(st.wantReturn)txt+=`⭐ また行きたい\n`;
+    t+=`## No.${s.id} ${s.n}｜${s.b}（${s.p}）\n`;
+    if(st.visitTime)t+=`チェックイン: ${st.visitTime}\n`;
+    if(st.wantReturn)t+=`⭐ また行きたい\n`;
     s.s.forEach((sk,i)=>{
       const dk=st.drinks[i]||{cups:0,rating:0,time:null};
-      if(dk.cups>0){
-        const stars="★".repeat(dk.rating)+"☆".repeat(5-dk.rating);
-        txt+=`  🍶 ${sk} — ${dk.cups}杯 ${stars}${dk.time?" ("+dk.time+")":""}\n`;
-        cups+=dk.cups;
-      }
+      if(dk.cups>0){t+=`  🍶 ${sk} — ${dk.cups}杯 ${"★".repeat(dk.rating)}${"☆".repeat(5-dk.rating)}${dk.time?" ("+dk.time+")":""}\n`;cups+=dk.cups}
     });
-    if(st.memo)txt+=`  📝 ${st.memo}\n`;
-    txt+="\n";
+    if(st.memo)t+=`  📝 ${st.memo}\n`;
+    t+="\n";
   });
-  txt+=`---\n合計: ${S.filter(s=>gs(s.id).visited).length}店 / ${cups}杯\n`;
-
-  const blob=new Blob([txt],{type:"text/plain;charset=utf-8"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="利き歩き2026_記録.txt";
-  a.click();
-  URL.revokeObjectURL(a.href);
+  t+=`---\n合計: ${S.filter(s=>gs(s.id).visited).length}店 / ${cups}杯\n`;
+  const blob=new Blob([t],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="利き歩き2026_記録.txt";a.click();URL.revokeObjectURL(a.href);
 }
 
-// Init
+/* ── Init ── */
 load();
 if(navigator.geolocation){
   navigator.geolocation.watchPosition(
