@@ -51,7 +51,7 @@ button,input,textarea,select{font-family:inherit}
 .cbtn.thm{background:var(--gldbg);border-color:var(--gldb);color:var(--gld)}
 .geo-w{margin-top:3px;font-size:8px;color:#e07050;background:#2a1515;padding:2px 6px;border-radius:3px;display:none}
 
-.ticker{background:var(--tickbg);border-bottom:1px solid var(--brd);padding:4px 0;overflow:hidden;display:none;position:relative;height:22px}
+.ticker{background:var(--tickbg);border-bottom:1px solid var(--brd);padding:4px 0;overflow:hidden;display:none;position:sticky;height:22px;z-index:99}
 .ticker.show{display:block}
 .ticker-wrap{display:flex;animation:tickScroll 30s linear infinite;white-space:nowrap}
 .ticker-wrap:hover,.ticker-wrap:active{animation-play-state:paused}
@@ -60,7 +60,7 @@ button,input,textarea,select{font-family:inherit}
 .ticker-item.done{color:var(--tx3);text-decoration:line-through}
 @keyframes tickScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-.search{padding:6px 10px;position:sticky;z-index:98}
+.search{padding:6px 10px;position:sticky;z-index:98;background:var(--bg)}
 .search-box{display:flex;align-items:center;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:0 8px;gap:6px}
 .search-box input{flex:1;background:transparent;border:none;color:var(--tx);font-size:12px;padding:7px 0;outline:none}
 .search-box input::placeholder{color:var(--tx3)}
@@ -393,7 +393,7 @@ const FAC=[
 ];
 
 /* ── State ── */
-let D,pos=null,sortDist=false,curTab="all",rFilter="all",tFilter="all",openId=null,searchQ="",recView="store",grpData=[];
+let D,pos=null,sortDist=false,curTab="all",rFilter="all",tFilter="all",openId=null,searchQ="",recView="store",grpData=[],facSort="type";
 
 function load(){try{D=JSON.parse(localStorage.getItem("kiki2026v4"))||{}}catch(e){D={}}
 if(!D.mp)D.mp="google";if(!D.st)D.st={};if(!D.pl)D.pl={ids:[],opt:false,td:null};if(!D.sp)D.sp="sasaki";if(!D.th)D.th="dark";
@@ -541,11 +541,11 @@ if(diff<=0){cls+=" done";prefix="🔓 "}
 else if(diff<=10){cls+=" soon";prefix="🔔 "}
 if(inPlan)prefix="⭐"+prefix;
 items.push({km,html:'<span class="'+cls+'" onclick="toggleOpen('+s.id+')">'+prefix+sk.k+" "+sk.n+"（"+s.n+"）</span>"})})});
-if(!items.length){tEl.className="ticker";return}
+if(!items.length){tEl.className="ticker";fixSticky();return}
 items.sort((a,b)=>a.km-b.km);
 const h=items.map(i=>i.html).join("");
 wEl.innerHTML=h+h; // duplicate for seamless scroll
-tEl.className="ticker show"}
+tEl.className="ticker show";fixSticky()}
 
 /* ── Render ── */
 function render(){
@@ -747,6 +747,19 @@ h+='</div>';c.innerHTML=h}
 function renderFacilities(){
 const c=document.getElementById("cards");
 let h='<div style="padding:6px 8px">';
+h+='<div style="display:flex;gap:4px;margin-bottom:6px">';
+h+='<button class="cbtn'+(facSort==="type"?" on":"")+'" onclick="facSort=\'type\';render()">🏷 種類別</button>';
+h+='<button class="cbtn'+(facSort==="dist"?" on":"")+'" onclick="facSort=\'dist\';render()">📍 近い順</button>';
+h+='</div>';
+if(facSort==="dist"&&pos){
+const all=[...FAC].sort((a,b)=>gd(pos.lat,pos.lng,a.la,a.lo)-gd(pos.lat,pos.lng,b.la,b.lo));
+all.forEach(f=>{
+const d=fd(gd(pos.lat,pos.lng,f.la,f.lo));
+h+='<div class="fac-card"><span class="fac-icon">'+f.t+'</span>';
+h+='<div class="fac-info"><div class="fac-nm">'+f.n+'</div>';
+h+='<div class="fac-dist">📍 '+d+'</div>';
+h+='</div><button class="fac-btn" onclick="window.open(\''+pinUrl(f.la,f.lo,f.n)+'\',\'_blank\')">地図</button></div>'})}
+else{
 ["🚻","🏪","💧"].forEach(t=>{
 const label=t==="🚻"?"トイレ":t==="🏪"?"コンビニ":"水飲み場";
 const items=FAC.filter(f=>f.t===t);
@@ -757,7 +770,7 @@ const d=pos?fd(gd(pos.lat,pos.lng,f.la,f.lo)):"";
 h+='<div class="fac-card"><span class="fac-icon">'+f.t+'</span>';
 h+='<div class="fac-info"><div class="fac-nm">'+f.n+'</div>';
 if(d)h+='<div class="fac-dist">📍 '+d+'</div>';
-h+='</div><button class="fac-btn" onclick="window.open(\''+pinUrl(f.la,f.lo,f.n)+'\',\'_blank\')">地図</button></div>'})});
+h+='</div><button class="fac-btn" onclick="window.open(\''+pinUrl(f.la,f.lo,f.n)+'\',\'_blank\')">地図</button></div>'})})}
 h+='</div>';c.innerHTML=h}
 
 /* ── Plan Sharing ── */
@@ -963,6 +976,7 @@ const ticker=document.getElementById("ticker");
 const search=document.getElementById("searchBar");
 const tabs=document.getElementById("tabBar");
 const hh=hdr.offsetHeight;
+ticker.style.top=hh+"px";
 const th=ticker.offsetHeight||0;
 search.style.top=(hh+th)+"px";
 tabs.style.top=(hh+th+search.offsetHeight)+"px"}
