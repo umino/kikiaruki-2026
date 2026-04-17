@@ -588,14 +588,14 @@ document.getElementById("riTitle").textContent=D.pl.opt?"✅ 最適化済":"📐
 const ff=document.getElementById("filters");
 if(curTab==="all"){
 ff.innerHTML=[{k:"all",l:"全て"},...Object.keys(RG).map(r=>({k:r,l:r}))].map(t=>
-'<button class="ftab'+(rFilter===t.k?' on':'')+'" onclick="setRegion(''+t.k+'')">'+t.l+'</button>').join("");
+'<button class="ftab'+(rFilter===t.k?' on':'')+'" onclick="setRegion(\''+t.k+'\')">'+t.l+'</button>').join("");
 ff.style.display="flex"}else ff.style.display="none";
 
 // Taste filters
 const tf=document.getElementById("tasteFilters");
 if(curTab==="all"){
 tf.innerHTML=Object.entries(TAGS).map(([k,v])=>
-'<button class="ftab'+(tFilter===k?' on':'')+'" onclick="setTaste(''+k+'')">'+v+'</button>').join("");
+'<button class="ftab'+(tFilter===k?' on':'')+'" onclick="setTaste(\''+k+'\')">'+v+'</button>').join("");
 tf.style.display="flex"}else tf.style.display="none";
 
 // Record toggle
@@ -640,7 +640,7 @@ const tagHtml=(s.tg||[]).map(t=>'<span class="ttag">'+TAGS[t]+'</span>').join(""
 
 let h='<div class="card'+(done?' done':'')+'">';
 h+='<div class="card-head" onclick="toggleOpen('+s.id+')">';
-if(s.th)h+='<img class="card-ph" src="'+s.th+'" loading="lazy" onerror="this.style.display='none'">';
+if(s.th)h+='<img class="card-ph" src="'+s.th+'" loading="lazy" onerror="this.style.display=\'none\'">';
 h+='<div class="card-left"><div class="card-tags">';
 if(pIdx>=0)h+='<span class="pnum">'+(pIdx+1)+'</span>';
 h+='<span class="ptag" style="background:'+pc(s.p)+'">'+mp(s.p)+'</span>';
@@ -659,10 +659,10 @@ h+='<span class="arrow'+(isO?' open':'')+'">▶</span></div></div>';
 
 h+='<div class="card-body'+(isO?' open':'')+'">';
 if(isO){
-if(s.ph)h+='<img src="'+s.ph+'" style="width:100%;border-radius:5px;margin-top:4px" loading="lazy" onerror="this.style.display='none'">';
+if(s.ph)h+='<img src="'+s.ph+'" style="width:100%;border-radius:5px;margin-top:4px" loading="lazy" onerror="this.style.display=\'none\'">';
 h+='<div class="nav-row">';
-h+='<button class="nav-btn route" onclick="window.open(''+navUrl(s.la,s.lo)+'','_blank')">'+(D.mp==="apple"?"🍎":"🗺")+" ナビ</button>";
-h+='<button class="nav-btn pin" onclick="window.open(''+pinUrl(s.la,s.lo,s.n)+'','_blank')">📍 地図</button></div>';
+h+='<button class="nav-btn route" onclick="window.open(\''+navUrl(s.la,s.lo)+'\',\'_blank\')">'+(D.mp==="apple"?"🍎":"🗺")+" ナビ</button>";
+h+='<button class="nav-btn pin" onclick="window.open(\''+pinUrl(s.la,s.lo,s.n)+'\',\'_blank\')">📍 地図</button></div>';
 if(st.vt)h+='<div class="visit-time">✅ '+st.vt+' チェックイン</div>';
 
 // Food
@@ -757,7 +757,7 @@ const d=pos?fd(gd(pos.lat,pos.lng,f.la,f.lo)):"";
 h+='<div class="fac-card"><span class="fac-icon">'+f.t+'</span>';
 h+='<div class="fac-info"><div class="fac-nm">'+f.n+'</div>';
 if(d)h+='<div class="fac-dist">📍 '+d+'</div>';
-h+='</div><button class="fac-btn" onclick="window.open(''+pinUrl(f.la,f.lo,f.n)+'','_blank')">地図</button></div>'})});
+h+='</div><button class="fac-btn" onclick="window.open(\''+pinUrl(f.la,f.lo,f.n)+'\',\'_blank\')">地図</button></div>'})});
 h+='</div>';c.innerHTML=h}
 
 /* ── Plan Sharing ── */
