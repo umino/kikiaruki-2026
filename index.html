@@ -6,7 +6,7 @@
 <title>利き歩きナビ 2026 v4</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="https://blog.sasas.jp/wp-content/uploads/2026/03/72T3728.jpg">
+<link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
 <style>
 :root{
@@ -274,12 +274,15 @@ button,input,textarea,select{font-family:inherit}
 <!-- Header -->
 <div class="hdr" id="hdr">
 <div class="hdr-top">
-<h1>🍶 日本酒利き歩きナビ2026</h1><span class="sub">v4.04</span>
+<h1>🍶 日本酒利き歩きナビ2026</h1><span class="sub">v4.05</span>
 <button class="cbtn thm" id="themeBtn" onclick="toggleTheme()" style="margin-left:auto">🌙</button>
 </div>
-<div style="text-align:center;padding:4px 0">
-<span style="font-size:22px;font-weight:800;color:var(--gld)">🍶 <span id="cupStat">0</span>杯</span>
-<span class="bac-ind" id="bacInd" style="font-size:13px"></span>
+<div style="display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 0">
+<img src="data:image/png;base64,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" style="height:40px;width:40px;object-fit:contain" alt="">
+<div style="text-align:center">
+<div style="font-size:22px;font-weight:800;color:var(--gld)"><span id="cupStat">0</span>杯</div>
+<span class="bac-ind" id="bacInd" style="font-size:11px"></span>
+</div>
 </div>
 <div class="hdr-row">
 <span class="stat" id="stat"></span>
