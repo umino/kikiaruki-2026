@@ -254,6 +254,11 @@ button,input,textarea,select{font-family:inherit}
 <button class="modal-btn" onclick="exportCsv()" style="background:var(--bg3);color:var(--tx);border:1px solid var(--brd)">📊 CSV形式</button>
 <button class="modal-btn" onclick="exportJson()" style="background:var(--bg3);color:var(--tx);border:1px solid var(--brd)">📋 JSON形式</button>
 <button class="modal-btn" onclick="shareRecord()">📤 記録を共有（URL生成）</button>
+<div style="border-top:1px solid var(--brd);margin:8px 0;padding-top:8px">
+<div style="font-size:10px;color:var(--tx3);margin-bottom:6px">🗺 地図データ出力</div>
+<button class="modal-btn" onclick="exportKml()" style="background:var(--bg3);color:var(--tx);border:1px solid var(--brd)">🗺 KML形式（Google Earth等）</button>
+<button class="modal-btn" onclick="exportGeoJson()" style="background:var(--bg3);color:var(--tx);border:1px solid var(--brd)">🗺 GeoJSON形式（geojson.io等）</button>
+</div>
 <div class="modal-skip" onclick="closeModal('exportModal')">閉じる</div>
 </div>
 </div>
@@ -304,7 +309,7 @@ button,input,textarea,select{font-family:inherit}
 📊 グループ集計（推し酒ランキング・タイムライン）<br>
 📄 テキスト / 📊 CSV / 📋 JSON 書き出し<br>
 </div>
-<p style="font-size:9px;color:var(--tx3);margin-top:12px">データは端末に自動保存されます（localStorage）<br>v4.05 | Made with 🍶</p>
+<p style="font-size:9px;color:var(--tx3);margin-top:12px">データは端末に自動保存されます（localStorage）<br>v4.06 | Made with 🍶</p>
 <div class="modal-skip" onclick="closeModal('helpModal')" style="margin-top:8px">閉じる</div>
 </div>
 </div>
@@ -312,7 +317,7 @@ button,input,textarea,select{font-family:inherit}
 <!-- Header -->
 <div class="hdr" id="hdr">
 <div class="hdr-top">
-<img src="data:image/png;base64,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" style="height:28px;width:28px;object-fit:contain" alt=""><h1 onclick="openModal('helpModal')" style="cursor:pointer">日本酒利き歩きナビ2026</h1><span class="sub">v4.05</span>
+<img src="data:image/png;base64,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" style="height:28px;width:28px;object-fit:contain" alt=""><h1 onclick="openModal('helpModal')" style="cursor:pointer">日本酒利き歩きナビ2026</h1><span class="sub">v4.06</span>
 <span style="margin-left:auto;display:flex;align-items:center;gap:6px">
 <span style="font-size:14px;font-weight:800;color:var(--gld)">🍶 <span id="cupStat">0</span>杯</span>
 <span class="bac-ind" id="bacInd" style="font-size:10px"></span>
@@ -836,7 +841,13 @@ navigator.clipboard.writeText(url).then(()=>showToast("📋 共有URLをコピ�
 closeModal("exportModal")}
 
 /* ── Group Import ── */
-function openGrpImport(){grpData=[];renderGrpMembers();openModal("grpImportModal")}
+function openGrpImport(){
+// Check if saved group data exists
+try{const saved=localStorage.getItem("kiki2026v4_grp");if(saved){grpData=JSON.parse(saved);if(grpData.length>0){showGroupPage();return}}}catch(e){}
+grpData=[];renderGrpMembers();openModal("grpImportModal")}
+
+function resetGrpData(){
+grpData=[];localStorage.removeItem("kiki2026v4_grp");closeGroupPage();openModal("grpImportModal")}
 
 function importRecord(){
 const input=document.getElementById("grpUrlInput").value.trim();
@@ -869,6 +880,7 @@ if(!grpData.some(d=>d.u===rec.u))grpData.push(rec)}
 /* ── Group Summary Page ── */
 function showGroupPage(){
 addSelfToGroup();
+try{localStorage.setItem("kiki2026v4_grp",JSON.stringify(grpData))}catch(e){}
 closeModal("grpImportModal");
 const pg=document.getElementById("grpPage");
 const members=grpData;const mc=members.length;
@@ -906,7 +918,7 @@ const foodRank=Object.entries(foodRatings).map(([n,d])=>({n,avg:d.ratings.length
 // Timeline
 allEvents.sort((a,b)=>a.t.localeCompare(b.t));
 
-let h='<div style="text-align:right;padding:8px"><button class="cbtn" onclick="closeGroupPage()">✕ 閉じる</button></div>';
+let h='<div style="text-align:right;padding:8px;display:flex;gap:4px;justify-content:flex-end"><button class="cbtn" onclick="resetGrpData()">🔄 データ再取込</button><button class="cbtn" onclick="closeGroupPage()">✕ 閉じる</button></div>';
 h+='<div class="grp-title">🍶 利き歩きログ 2026</div>';
 h+='<div class="grp-sub">'+members.map(m=>m.u).join(" × ")+'</div>';
 
@@ -993,6 +1005,60 @@ data.stores.push(entry)});
 dl(JSON.stringify(data,null,2),"利き歩きログ2026_"+D.usr.name+".json","application/json")}
 
 function dl(content,filename,type){const b=new Blob([content],{type:type+";charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=filename;a.click();URL.revokeObjectURL(a.href);closeModal("exportModal")}
+
+/* ── KML Export ── */
+function exportKml(){
+var NT="na"+"me";
+var nO="<"+NT+">";var nC="</"+NT+">";
+var placemarks="";
+S.forEach(function(s){
+var st=gs(s.id);var inP=ip(s.id);
+var color=st.v?"FF00FF00":inP?"FF00D4FF":"FF0000FF";
+var desc=s.b+"（"+s.p+"）";
+if(st.v&&st.vt)desc+="\nチェックイン: "+st.vt;
+var drunks=[];
+s.s.forEach(function(sk,i){var dk=st.dr[i];if(dk&&dk.c>0)drunks.push(sk.n+" x"+dk.c)});
+if(drunks.length)desc+="\n\n飲んだ酒:\n"+drunks.join("\n");
+var fds=[];
+s.f.forEach(function(f,fi){var fk=st.fr[fi];if(fk&&fk.c>0)fds.push(f.n+" x"+fk.c)});
+if(fds.length)desc+="\n\nフード:\n"+fds.join("\n");
+if(st.m)desc+="\n\nメモ: "+st.m;
+placemarks+="<Placemark>"+nO+"No."+s.id+" "+s.n+nC
++"<description><![CDATA["+desc+"]]></description>"
++"<Style><IconStyle><color>"+color+"</color></IconStyle></Style>"
++"<Point><coordinates>"+s.lo+","+s.la+",0</coordinates></Point>"
++"</Placemark>\n"});
+var routeLine="";
+if(D.pl.ids.length>1){
+var rc=D.pl.ids.map(function(id){var s=S.find(function(x){return x.id===id});return s.lo+","+s.la+",0"}).join(" ");
+routeLine="<Placemark>"+nO+"マイプラン ルート"+nC
++"<Style><LineStyle><color>FF0080FF</color><width>3</width></LineStyle></Style>"
++"<LineString><coordinates>"+rc+"</coordinates></LineString>"
++"</Placemark>\n"}
+var kml='<?xml version="1.0" encoding="UTF-8"?>\n'
++"<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n<Document>\n"
++nO+"利き歩きログ 2026 - "+(D.usr.name||"名無し")+nC+"\n"
++placemarks+routeLine+"</Document>\n</kml>";
+dl(kml,"利き歩き2026_"+(D.usr.name||"名無し")+".kml","application/vnd.google-earth.kml+xml")}
+
+/* ── GeoJSON Export ── */
+function exportGeoJson(){
+const features=[];
+S.forEach(s=>{
+const st=gs(s.id);const inP=ip(s.id);
+const status=st.v?"visited":inP?"planned":"unvisited";
+const props={id:s.id,name:s.n,brewery:s.b,pref:s.p,status:status,checkin:st.vt,memo:st.m,wantReturn:st.wr,sakes:[],foods:[]};
+s.s.forEach((sk,i)=>{const dk=st.dr[i];if(dk&&dk.c>0)props.sakes.push({name:sk.n,cups:dk.c,rating:dk.r,time:dk.t})});
+s.f.forEach((f,fi)=>{const fk=st.fr[fi];if(fk&&fk.c>0)props.foods.push({name:f.n,count:fk.c,rating:fk.r})});
+features.push({type:"Feature",geometry:{type:"Point",coordinates:[s.lo,s.la]},properties:props})});
+
+// Route line
+if(D.pl.ids.length>1){
+const coords=D.pl.ids.map(id=>{const s=S.find(x=>x.id===id);return[s.lo,s.la]});
+features.push({type:"Feature",geometry:{type:"LineString",coordinates:coords},properties:{name:"マイプラン ルート",type:"route"}})}
+
+const geojson={type:"FeatureCollection",features:features};
+dl(JSON.stringify(geojson,null,2),"利き歩き2026_"+D.usr.name+".geojson","application/geo+json")}
 
 /* ── URL Params (plan import, record import) ── */
 function handleUrlParams(){
