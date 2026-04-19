@@ -305,6 +305,7 @@ button,input,textarea,select{font-family:inherit}
 🚩 スタート地点を受付3ヶ所から選択<br>
 🔍 酒・店・蔵・県・フードで横断検索<br>
 🏷 味わいタグで好みの酒を絞り込み<br>
+🍶 振舞酒33ヶ所も全店舗タブに統合表示<br>
 <div style="font-size:9px;color:var(--tx3);font-weight:700;margin:6px 0 2px">🍶 当日サポート</div>
 ⏰ 高級酒の開栓時間をティッカーでお知らせ<br>
 🍺 酔い度チェック（BAC推定表示）<br>
@@ -431,6 +432,7 @@ const STARTS={sasaki:{la:35.6845,lo:139.7842,n:"新川屋佐々木酒店"},fukut
 const RG={"東北":["青森","岩手","秋田","山形","宮城","福島"],"関東":["栃木","群馬","埼玉","千葉","茨城","神奈川"],"中部":["新潟","長野","富山","石川","福井","静岡","岐阜","愛知"],"近畿":["三重","京都","滋賀","奈良","兵庫"],"中国四国":["広島","岡山","島根","山口","愛媛","高知"],"九州":["佐賀"]};
 const PC={"青森":"#2563eb","岩手":"#059669","秋田":"#d97706","山形":"#dc2626","宮城":"#7c3aed","福島":"#0891b2","栃木":"#65a30d","群馬":"#ca8a04","埼玉":"#0d9488","千葉":"#e11d48","茨城":"#4f46e5","神奈川":"#0284c7","新潟":"#2563eb","長野":"#059669","富山":"#7c3aed","石川":"#0891b2","福井":"#ca8a04","静岡":"#16a34a","岐阜":"#9333ea","愛知":"#dc2626","三重":"#d97706","京都":"#be185d","滋賀":"#0d9488","奈良":"#9333ea","兵庫":"#1d4ed8","広島":"#b91c1c","岡山":"#a16207","島根":"#065f46","山口":"#7c2d12","愛媛":"#ea580c","高知":"#15803d","佐賀":"#6d28d9"};
 const TAGS={karakuchi:"🔥 辛口",umami:"🍚 旨味",hanayaka:"🌸 華やか",kimoto:"🏺 生酛山廃",jukusei:"🍶 熟成",sparkling:"🫧 泡/にごり",shokuchu:"🍽 食中酒",koseiha:"🔬 個性派"};
+const FUR=[{"id":91,"n":"神渡酒場 by mikibar ＠三勝","b":"神渡（長野/豊島屋）","la":35.6848,"lo":139.784,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/①神渡酒場-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/①神渡酒場-300x225.jpg","f":[]},{"id":114,"n":"賀茂鶴","b":"賀茂鶴（広島）","la":35.6838,"lo":139.7858,"ph":"https://blog.sasas.jp/wp-content/uploads/2018/08/D1T8694-1024x683.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2018/08/D1T8694-300x200.jpg","f":[]},{"id":53,"n":"室町四丁目有志","b":"","la":35.6892,"lo":139.7735,"ph":"https://blog.sasas.jp/wp-content/uploads/2024/03/muro4-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2024/03/muro4-300x225.jpg","f":[]},{"id":65,"n":"立ち呑みみるくばー","b":"","la":35.686,"lo":139.7745,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/みるくばー-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/みるくばー-300x225.jpg","f":[{"n":"塩もつ煮込み","p":null},{"n":"野菜のからしづけ","p":null}]},{"id":66,"n":"一葉","b":"","la":35.6858,"lo":139.7748,"ph":"https://blog.sasas.jp/wp-content/uploads/2024/03/DSC00476-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2024/03/DSC00476-300x225.jpg","f":[{"n":"鶏天　柚子胡椒マヨネーズ添え","p":500},{"n":"やげん軟骨梅和え","p":400},{"n":"炙りエイヒレ","p":500}]},{"id":67,"n":"まめカフェ 日本橋","b":"","la":35.6895,"lo":139.7758,"ph":"https://blog.sasas.jp/wp-content/uploads/2025/03/mamecafe3-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2025/03/mamecafe3-300x225.jpg","f":[{"n":"自家製ピクルス","p":350},{"n":"一口フランク","p":350}]},{"id":68,"n":"日本橋弁松総本店","b":"","la":35.6857,"lo":139.775,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/弁松-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/弁松-300x225.jpg","f":[{"n":"呑兵衛撃沈セット","p":500}]},{"id":70,"n":"舟遊びみづは","b":"","la":35.684,"lo":139.774,"ph":"https://blog.sasas.jp/wp-content/uploads/2019/03/miduha2-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2019/03/miduha2-300x225.jpg","f":[]},{"id":71,"n":"ROJI日本橋","b":"","la":35.6838,"lo":139.7745,"ph":"https://blog.sasas.jp/wp-content/uploads/2019/03/rojis-1024x683.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2019/03/rojis-300x200.jpg","f":[]},{"id":73,"n":"本町四丁目東町会有志@鮨ひぐち","b":"","la":35.6898,"lo":139.7752,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/鮨ひぐち-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/鮨ひぐち-300x225.jpg","f":[{"n":"握り4かん（中トロ、たい、海老、かんぱち）","p":1800},{"n":"太巻きハーフ","p":1300}]},{"id":76,"n":"ダリア食堂","b":"","la":35.6898,"lo":139.7782,"ph":"https://blog.sasas.jp/wp-content/uploads/2018/08/D1T9358-1024x683.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2018/08/D1T9358-300x200.jpg","f":[]},{"id":80,"n":"ギャラリーキッチンKIWI","b":"","la":35.6893,"lo":139.777,"ph":"https://blog.sasas.jp/wp-content/uploads/2025/03/kiwi-3s-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2025/03/kiwi-3s-300x225.jpg","f":[{"n":"ほたるいかのフラン（洋風茶碗蒸し/限定20）","p":700},{"n":"レバー納豆とパクチークリーム","p":700},{"n":"カレー風味の海老マヨサラダ","p":800}]},{"id":81,"n":"KIRIKO 日本橋","b":"","la":35.6892,"lo":139.7768,"ph":"https://blog.sasas.jp/wp-content/uploads/2025/03/kiriko-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2025/03/kiriko-300x225.jpg","f":[]},{"id":84,"n":"cafe＆bar 優駿","b":"","la":35.6875,"lo":139.7808,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/優駿-1-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/優駿-1-300x225.jpg","f":[{"n":"ラムミートタコスチップ","p":400},{"n":"サーモンクリームチーズ","p":400},{"n":"大人のラムレーズンアイス","p":300}]},{"id":85,"n":"イチマス田源 きものクリニック","b":"","la":35.688,"lo":139.78,"ph":"https://blog.sasas.jp/wp-content/uploads/2024/03/DSC00586-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2024/03/DSC00586-300x225.jpg","f":[]},{"id":86,"n":"Genomic Giraffe","b":"","la":35.6878,"lo":139.7815,"ph":"https://blog.sasas.jp/wp-content/uploads/2025/03/giraffe-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2025/03/giraffe-300x225.jpg","f":[{"n":"エシカルジャンクプロジェクト南洲タコス","p":1000}]},{"id":87,"n":"GATA GATO","b":"","la":35.688,"lo":139.7818,"ph":"https://blog.sasas.jp/wp-content/uploads/2025/03/gatagato-1s-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2025/03/gatagato-1s-300x225.jpg","f":[]},{"id":94,"n":"マルコム ゲール","b":"","la":35.6852,"lo":139.7838,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/マルコムゲール-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/マルコムゲール-300x225.jpg","f":[]},{"id":95,"n":"人形町キッチン","b":"","la":35.6853,"lo":139.7835,"ph":"https://blog.sasas.jp/wp-content/uploads/2024/03/Z7T3506-1024x683.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2024/03/Z7T3506-300x200.jpg","f":[]},{"id":96,"n":"加悦","b":"","la":35.6898,"lo":139.776,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/加悦-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/加悦-300x225.jpg","f":[{"n":"長崎直送\u201c牧島ちくわ\u201dの炙り","p":300}]},{"id":97,"n":"日東タオル","b":"","la":35.6918,"lo":139.7818,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/日東タオル-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/日東タオル-300x225.jpg","f":[]},{"id":98,"n":"Horumonえいた","b":"","la":35.691,"lo":139.779,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/えいたgem-1024x767.png","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/えいたgem-1024x767.png","f":[{"n":"牛タンの煮込み","p":null},{"n":"牛のど軟骨(ウルテ)ポン酢","p":null},{"n":"もつ鍋","p":null}]},{"id":99,"n":"北斎通油町ギャラリー","b":"","la":35.6895,"lo":139.7788,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/ボンマックス-1-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/ボンマックス-1-300x225.jpg","f":[]},{"id":100,"n":"テ","b":"","la":35.691,"lo":139.7845,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/テ1-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/テ1-300x225.jpg","f":[{"n":"ラム肉の水餃子1個","p":200}]},{"id":101,"n":"BEAVER BREAD","b":"","la":35.6915,"lo":139.7838,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/BEAVERBREAD2-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/BEAVERBREAD2-300x225.jpg","f":[]},{"id":102,"n":"食の會 美食倶楽部","b":"","la":35.6875,"lo":139.7828,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/食の會美食倶楽部-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/食の會美食倶楽部-300x225.jpg","f":[{"n":"蟹だし味噌汁","p":200},{"n":"濃い味噌牛すじ煮込み","p":300},{"n":"蛸から串","p":300}]},{"id":104,"n":"玄冶店 濱田家","b":"","la":35.6842,"lo":139.7845,"ph":"https://blog.sasas.jp/wp-content/uploads/2019/03/hamadaya-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2019/03/hamadaya-300x225.jpg","f":[]},{"id":106,"n":"RESTAURANT BAR BALLADE","b":"","la":35.6848,"lo":139.7842,"ph":"https://blog.sasas.jp/wp-content/uploads/2019/03/ballade-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2019/03/ballade-300x225.jpg","f":[{"n":"和牛ローストビーフ 山わさび醤油漬け","p":1000},{"n":"ミートローフのマッシュポテト和え","p":500}]},{"id":112,"n":"せき亭","b":"","la":35.6855,"lo":139.783,"ph":"https://blog.sasas.jp/wp-content/uploads/2025/03/72T2468s-1024x683.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2025/03/72T2468s-300x200.jpg","f":[{"n":"せんべい汁","p":500},{"n":"焼うに","p":1500}]},{"id":113,"n":"サロンゴカフェ","b":"","la":35.6858,"lo":139.7825,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/03/サロンゴ-2-1024x768.jpg","th":"https://blog.sasas.jp/wp-content/uploads/2026/03/サロンゴ-2-300x225.jpg","f":[{"n":"野菜の揚げ浸し","p":500},{"n":"肉詰め椎茸、ピーマン","p":600},{"n":"炊き込みご飯","p":600}]},{"id":55,"n":"燗酒ライヴ（日本酒隙間バル）＠福徳の森","b":"隙間バル（佐々木酒店厳選酒）","la":35.6865,"lo":139.773,"ph":"","th":"","f":[]},{"id":60,"n":"日本酒隙間バル＠コレド室町仲通り","b":"隙間バル（佐々木酒店厳選酒）","la":35.6862,"lo":139.7725,"ph":"","th":"","f":[]},{"id":88,"n":"日本酒隙間バル＠堀留公園マルシェ","b":"隙間バル（佐々木酒店厳選酒）","la":35.6871,"lo":139.7808,"ph":"https://blog.sasas.jp/wp-content/uploads/2026/01/kiki-10th-chira1-212x300.png","th":"https://blog.sasas.jp/wp-content/uploads/2026/01/kiki-10th-chira1-212x300.png","f":[]}];
 const OSRM="https://routing.openstreetmap.de/routed-foot";
 
 // Facilities: toilets, convenience stores, water
@@ -472,6 +474,9 @@ function pc(p){return PC[mp(p)]||"#666"}
 function gr(p){for(const[r,a]of Object.entries(RG))for(const x of p.split("/"))if(a.includes(x.trim()))return r;return"他"}
 function tc(){let c=0;for(const st of Object.values(D.st))for(const d of Object.values(st.dr||{}))c+=(d.c||0);return c}
 function ip(id){return D.pl.ids.includes(id)}
+function isFur(id){return id>52}
+function getFurById(id){return FUR.find(function(f){return f.id===id})}
+function buildFurIndex(f){return[f.n,f.b||"","振舞酒"].join(" ").toLowerCase()}
 function getStart(){if(D.sp==="gps"&&pos)return{la:pos.lat,lo:pos.lng};return STARTS[D.sp]||STARTS.sasaki}
 
 function navUrl(la,lo){return D.mp==="apple"?"https://maps.apple.com/?daddr="+la+","+lo+"&dirflg=w":"https://www.google.com/maps/dir/?api=1&destination="+la+","+lo+"&travelmode=walking"}
@@ -684,7 +689,7 @@ document.getElementById("riTitle").textContent=D.pl.opt?"✅ 最適化済":"📐
 // Region filters
 const ff=document.getElementById("filters");
 if(curTab==="all"){
-ff.innerHTML=[{k:"all",l:"全て"},...Object.keys(RG).map(r=>({k:r,l:r}))].map(t=>
+ff.innerHTML=[{k:"all",l:"全て"},...Object.keys(RG).map(r=>({k:r,l:r})),{k:"furumai",l:"🍶 振舞酒"}].map(t=>
 '<button class="ftab'+(rFilter===t.k?' on':'')+'" onclick="setRegion(\''+t.k+'\')">'+t.l+'</button>').join("");
 ff.style.display="flex"}else ff.style.display="none";
 
@@ -713,12 +718,17 @@ if(curTab==="log"&&recView==="timeline"){renderTimeline();return}
 let stores=[];
 if(curTab==="plan")stores=D.pl.ids.map(id=>S.find(s=>s.id===id)).filter(Boolean);
 else if(curTab==="log")stores=S.filter(s=>gs(s.id).v);
-else{stores=[...S];
-if(rFilter!=="all")stores=stores.filter(s=>gr(s.p)===rFilter);
-if(tFilter!=="all")stores=stores.filter(s=>(s.tg||[]).includes(tFilter))}
+else{
+var mainStores=[...S];
+if(rFilter==="furumai"){mainStores=[];stores=FUR.map(function(f){return{id:f.id,n:f.n,b:f.b||"振舞酒",p:"振舞酒",la:f.la,lo:f.lo,ph:f.ph,th:f.th,f:f.f,s:[],tg:[],fur:true}})}
+else{
+if(rFilter!=="all")mainStores=mainStores.filter(s=>gr(s.p)===rFilter);
+if(tFilter!=="all")mainStores=mainStores.filter(s=>(s.tg||[]).includes(tFilter));
+var furStores=tFilter==="all"?FUR.map(function(f){return{id:f.id,n:f.n,b:f.b||"振舞酒",p:"振舞酒",la:f.la,lo:f.lo,ph:f.ph,th:f.th,f:f.f,s:[],tg:[],fur:true}}):[];
+stores=[...mainStores,...furStores]}}
 
 // Search filter
-if(searchQ){stores=stores.filter(s=>buildIndex(s).includes(searchQ));
+if(searchQ){stores=stores.filter(s=>s.fur?buildFurIndex(s).includes(searchQ):buildIndex(s).includes(searchQ));
 document.getElementById("searchCnt").textContent=stores.length+"店"}
 else document.getElementById("searchCnt").textContent="";
 
@@ -740,7 +750,8 @@ h+='<div class="card-head" onclick="toggleOpen('+s.id+')">';
 if(s.th)h+='<img class="card-ph" src="'+s.th+'" loading="lazy" onerror="this.style.display=\'none\'">';
 h+='<div class="card-left"><div class="card-tags">';
 if(pIdx>=0)h+='<span class="pnum">'+(pIdx+1)+'</span>';
-h+='<span class="ptag" style="background:'+pc(s.p)+'">'+mp(s.p)+'</span>';
+if(s.fur)h+='<span class="ptag" style="background:#7c3aed">振舞酒</span>';
+else h+='<span class="ptag" style="background:'+pc(s.p)+'">'+mp(s.p)+'</span>';
 h+='<span class="ntag">No.'+s.id+'</span>';
 if(d!=null){const isR=!!distCache[s.id];h+='<span class="dtag">'+(isR?"🚶":"📍")+fd(d)+(isR?" ~"+wm(d)+"分":"")+'</span>'}
 if(dCnt)h+='<span class="dtag">🍶'+dCnt+'</span>';
@@ -761,6 +772,23 @@ h+='<div class="nav-row">';
 h+='<button class="nav-btn route" onclick="window.open(\''+navUrl(s.la,s.lo)+'\',\'_blank\')">'+(D.mp==="apple"?"🍎":"🗺")+" ナビ</button>";
 h+='<button class="nav-btn pin" onclick="window.open(\''+pinUrl(s.la,s.lo,s.n)+'\',\'_blank\')">📍 地図</button></div>';
 if(st.vt)h+='<div class="visit-time">✅ '+st.vt+' チェックイン</div>';
+
+// Furumai drink tracking
+if(s.fur){
+h+='<div class="slabel">🍶 振舞酒</div>';
+if(s.b)h+='<div style="font-size:10px;color:var(--txb);margin-bottom:4px">'+s.b+'</div>';
+var fdk=st.dr[0]||{c:0,t:null,r:0};var fon=fdk.c>0;
+h+='<div class="sake-item"><button class="sake-chk'+(fon?' on':'')+'" onclick="toggleDrink('+s.id+',0,event)">'+(fon?"✓":"")+'</button>';
+h+='<div class="sake-inf"><span class="sake-nm">振舞酒</span></div>';
+h+='<div class="food-ctrls"><button class="cup-btn" onclick="addCup('+s.id+',0,-1,event)">−</button>';
+h+='<span class="cup-cnt">'+fdk.c+'</span>';
+h+='<button class="cup-btn" onclick="addCup('+s.id+',0,1,event)">＋</button></div></div>';
+h+='<div class="stars-row"><div class="stars">';
+for(var r=1;r<=5;r++)h+='<span class="star'+(fdk.r>=r?' on':'')+'" onclick="setRating('+s.id+',0,'+r+',event)">★</span>';
+h+='</div>'+(fdk.t?'<span class="sake-time">'+fdk.t+'</span>':'')+'</div>';
+h+='<div class="memo-area"><div class="slabel">📝 飲んだ酒・感想メモ</div>';
+h+='<textarea class="memo-input" placeholder="飲んだ酒名、感想など…" oninput="setMemo('+s.id+',this.value)">'+(st.m||'')+'</textarea></div>';
+h+='</div></div>';return h}
 
 // Food
 if(s.f.length){h+='<div class="slabel">🍽 フード</div>';
