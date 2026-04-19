@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{
 --bg:#0f0f0f;--bg2:#1c1816;--bg3:#151210;--brd:#2a2420;--brd2:#3a2020;
@@ -277,6 +279,17 @@ button,input,textarea,select{font-family:inherit}
 </div>
 
 
+<!-- Route View Modal -->
+<div class="modal-bg" id="mapModal" onclick="if(event.target===this)closeModal('mapModal')">
+<div style="background:var(--bg2);border:1px solid var(--brd);border-radius:8px;width:calc(100% - 16px);max-width:640px;height:85vh;display:flex;flex-direction:column;overflow:hidden">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--brd);flex-shrink:0">
+<span style="font-size:12px;font-weight:700;color:var(--gld)">🗺 ルートビュー</span>
+<button class="cbtn" onclick="closeModal('mapModal')">✕ 閉じる</button>
+</div>
+<div id="leafletMap" style="flex:1;min-height:0"></div>
+</div>
+</div>
+
 <!-- Help Modal -->
 <div class="modal-bg" id="helpModal">
 <div class="modal" style="text-align:center">
@@ -371,7 +384,8 @@ button,input,textarea,select{font-family:inherit}
 <div style="display:flex;gap:4px;margin-top:4px">
 <button class="ri-btn pri" onclick="optimizeRoute()">🔄 最適化</button>
 <button class="ri-btn sec" onclick="reoptFromHere()">📍 現在地から</button>
-<button class="ri-btn sec" onclick="openMapRoute()">🗺 地図で表示</button>
+<button class="ri-btn sec" onclick="openMapRoute()">🗺 地図</button>
+<button class="ri-btn sec" onclick="openRouteView()">🔭 ルートビュー</button>
 <button class="ri-btn sec" onclick="sharePlan()">📤 共有</button>
 </div>
 </div>
@@ -511,14 +525,14 @@ document.getElementById("searchClear").style.display=searchQ?"inline":"none";ren
 function clearSearch(){document.getElementById("searchInput").value="";searchQ="";document.getElementById("searchClear").style.display="none";render()}
 
 /* ── OSRM ── */
-let distCache={},dcTime=0;
+let distCache={},dcTime=0,lastRouteGeo=null;
 async function osrmTrip(coords){
 const cs=coords.map(c=>c.lo+","+c.la).join(";");
-const r=await fetch(OSRM+"/trip/v1/foot/"+cs+"?roundtrip=false&source=first&geometries=geojson&overview=false");
+const r=await fetch(OSRM+"/trip/v1/foot/"+cs+"?roundtrip=false&source=first&geometries=geojson&overview=full");
 if(!r.ok)throw new Error("HTTP "+r.status);
 const j=await r.json();if(j.code!=="Ok")throw new Error(j.message||j.code);
 const order=j.waypoints.map((wp,i)=>({wpi:wp.waypoint_index,input:i})).sort((a,b)=>a.wpi-b.wpi).map(x=>x.input);
-return{order,distance:j.trips[0].distance,duration:j.trips[0].duration}}
+return{order,distance:j.trips[0].distance,duration:j.trips[0].duration,geometry:j.trips[0].geometry.coordinates}}
 
 async function updateDists(){
 if(!pos||Date.now()-dcTime<60000)return;
@@ -532,7 +546,9 @@ const ids=D.pl.ids.filter(id=>!gs(id).v);if(ids.length<2){alert("未訪問2店�
 document.getElementById("riLoad").className="ri-load show";
 try{const st=getStart();const coords=[{la:st.la,lo:st.lo},...ids.map(id=>{const s=S.find(x=>x.id===id);return{la:s.la,lo:s.lo}})];
 const r=await osrmTrip(coords);const re=r.order.slice(1).map(i=>ids[i-1]).filter(Boolean);
-const vi=D.pl.ids.filter(id=>gs(id).v);D.pl.ids=[...vi,...re];D.pl.opt=true;D.pl.td=r.distance;save();render()}
+const vi=D.pl.ids.filter(id=>gs(id).v);D.pl.ids=[...vi,...re];D.pl.opt=true;D.pl.td=r.distance;
+lastRouteGeo={path:r.geometry,stores:r.order.slice(1).map((inp,i)=>{const s=S.find(x=>x.id===ids[inp-1]);return{name:s.n,la:s.la,lo:s.lo,order:i+1}})};
+save();render()}
 catch(e){alert("OSRM接続エラー: "+e.message)}
 document.getElementById("riLoad").className="ri-load"}
 
@@ -542,7 +558,9 @@ const ids=D.pl.ids.filter(id=>!gs(id).v);if(ids.length<2)return;
 document.getElementById("riLoad").className="ri-load show";
 try{const coords=[{la:pos.lat,lo:pos.lng},...ids.map(id=>{const s=S.find(x=>x.id===id);return{la:s.la,lo:s.lo}})];
 const r=await osrmTrip(coords);const re=r.order.slice(1).map(i=>ids[i-1]).filter(Boolean);
-const vi=D.pl.ids.filter(id=>gs(id).v);D.pl.ids=[...vi,...re];D.pl.opt=true;D.pl.td=r.distance;save();render()}
+const vi=D.pl.ids.filter(id=>gs(id).v);D.pl.ids=[...vi,...re];D.pl.opt=true;D.pl.td=r.distance;
+lastRouteGeo={path:r.geometry,stores:r.order.slice(1).map((inp,i)=>{const s=S.find(x=>x.id===ids[inp-1]);return{name:s.n,la:s.la,lo:s.lo,order:i+1}})};
+save();render()}
 catch(e){alert("エラー: "+e.message)}
 document.getElementById("riLoad").className="ri-load"}
 
@@ -552,16 +570,47 @@ const pts=ids.map(id=>{const s=S.find(x=>x.id===id);return s.la+","+s.lo});
 if(D.mp==="apple"){const url="https://maps.apple.com/?dirflg=w&saddr=Current+Location&daddr="+pts.join("+to:");window.open(url)}
 else{const url="https://www.google.com/maps/dir/"+pts.join("/")+"?travelmode=walking";window.open(url)}}
 
+async function openRouteView(){
+const ids=D.pl.ids.filter(id=>!gs(id).v);
+if(!ids.length){showToast("プランに未訪問店舗がありません");return}
+if(!lastRouteGeo){
+document.getElementById("riLoad").className="ri-load show";
+try{
+const st=getStart();
+const coords=[{la:st.la,lo:st.lo},...ids.map(id=>{const s=S.find(x=>x.id===id);return{la:s.la,lo:s.lo}})];
+const r=await osrmTrip(coords);
+lastRouteGeo={path:r.geometry,stores:r.order.slice(1).map((inp,i)=>{const s=S.find(x=>x.id===ids[inp-1]);return{name:s.n,la:s.la,lo:s.lo,order:i+1}})};
+}catch(e){alert("ルート取得エラー: "+e.message);document.getElementById("riLoad").className="ri-load";return}
+document.getElementById("riLoad").className="ri-load"}
+openModal('mapModal');
+setTimeout(renderLeaflet,80)}
+
+let _lmap=null;
+function renderLeaflet(){
+const el=document.getElementById("leafletMap");
+if(_lmap){_lmap.remove();_lmap=null}
+const m=L.map(el);_lmap=m;
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+attribution:"© <a href='https://osm.org/copyright'>OpenStreetMap</a>",maxZoom:19}).addTo(m);
+if(!lastRouteGeo||!lastRouteGeo.path.length)return;
+const lls=lastRouteGeo.path.map(([lng,lat])=>[lat,lng]);
+L.polyline(lls,{color:"#e74c3c",weight:4,opacity:.85}).addTo(m);
+lastRouteGeo.stores.forEach(s=>{
+const icon=L.divIcon({html:"<div style='background:#d4a050;color:#1a1008;font-weight:800;font-size:10px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.5)'>"+s.order+"</div>",
+className:"",iconSize:[22,22],iconAnchor:[11,11]});
+L.marker([s.la,s.lo],{icon}).bindTooltip(s.name,{direction:"top"}).addTo(m)});
+m.fitBounds(L.polyline(lls).getBounds(),{padding:[24,24]})}
+
 /* ── Actions ── */
 function setTab(t){curTab=t;openId=null;render()}
 function toggleSort(){sortDist=!sortDist;if(sortDist&&pos)updateDists();render()}
 function toggleMap(){D.mp=D.mp==="google"?"apple":"google";save();render()}
-function setStart(v){D.sp=v;D.pl.opt=false;save();render()}
+function setStart(v){D.sp=v;D.pl.opt=false;lastRouteGeo=null;save();render()}
 function setRegion(r){rFilter=r;render()}
 function setTaste(t){tFilter=tFilter===t?"all":t;render()}
 function setRecView(v){recView=v;render()}
 function toggleOpen(id){openId=openId===id?null:id;render()}
-function togglePlan(id,e){e&&e.stopPropagation();if(ip(id)){D.pl.ids=D.pl.ids.filter(x=>x!==id);D.pl.opt=false}else{D.pl.ids.push(id);D.pl.opt=false}save();render()}
+function togglePlan(id,e){e&&e.stopPropagation();if(ip(id)){D.pl.ids=D.pl.ids.filter(x=>x!==id);D.pl.opt=false}else{D.pl.ids.push(id);D.pl.opt=false}lastRouteGeo=null;save();render()}
 
 function toggleVisit(id,e){e&&e.stopPropagation();const st=gs(id);st.v=!st.v;st.vt=st.v?now():null;save();
 if(st.v)showToast("✅ "+now()+" チェックイン！");render()}
